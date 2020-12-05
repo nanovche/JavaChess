@@ -15,7 +15,7 @@ import static com.chess.engine.utils.BoardUtils.*;
 
 public class Launcher {
 
-    //random message
+
 
     public static void main(String[] args) throws IOException {
 
