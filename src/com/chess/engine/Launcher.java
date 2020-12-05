@@ -15,7 +15,7 @@ import static com.chess.engine.utils.BoardUtils.*;
 
 public class Launcher {
 
-    //does the player move the pawn or the pawn moves itself?
+    
 
     public static void main(String[] args) throws IOException {
 
