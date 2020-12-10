@@ -1,5 +1,6 @@
 package gui;
 
+import com.chess.engine.Alliance;
 import com.chess.engine.board.Board;
 import com.chess.engine.board.Tile;
 import com.chess.engine.pieces.Piece;
@@ -24,8 +25,6 @@ import static javax.swing.SwingUtilities.isRightMouseButton;
 
 public class Table {
 
-    //REWRITE RANK CONSTANTS
-
     private final JFrame gameFrame;
     private final BoardPanel boardPanel;
     private final Board chessBoard;
@@ -38,15 +37,16 @@ public class Table {
     private Tile destinationTile;
     private Piece humanMovedPiece;
 
-    private final static Dimension OUTER_FRAME_DIMENSION = new Dimension(600,600);
-    private final static Dimension BOARD_PANEL_DIMENSION  = new Dimension(400,350);
-    private final static Dimension TILE_PANEL_DIMENSION  = new Dimension(10,10);
+    //location?
+    private final static Dimension OUTER_FRAME_DIMENSION = new Dimension(600, 600);
+    private final static Dimension BOARD_PANEL_DIMENSION = new Dimension(400, 350);
+    private final static Dimension TILE_PANEL_DIMENSION = new Dimension(10, 10);
     private final static String defaultPieceImagesPath = "art/pieces/plain/";
 
-    private final Color lightTileColor = Color.decode("#FFFACD");
-    private final Color darkTileColor = Color.decode("#593E1A");
+    private final Color lightTileColor = new Color(242, 242, 242);
+    private final Color darkTileColor = new Color(0, 0, 0);
 
-    public Table(){
+    public Table() {
         gameFrame = new JFrame("JChess");
         gameFrame.setLayout(new BorderLayout());
         final JMenuBar tableMenuBar = createTableMenuBar();
@@ -64,17 +64,24 @@ public class Table {
         gameFrame.setVisible(true);
     }
 
-    private JMenuBar createTableMenuBar(){
+    //green area: changes in git
+
+    //why these are created in methods
+    private JMenuBar createTableMenuBar() {
         final JMenuBar tableMenuBar = new JMenuBar();
         tableMenuBar.add(createFileMenu());
         return tableMenuBar;
     }
 
-    private static JMenu createFileMenu(){
+    private static JMenu createFileMenu() {
+        //usage?
+
         final JMenu fileMenu = new JMenu("File");
         final JMenuItem openPGN = new JMenuItem("Load PGN File");
         openPGN.addActionListener(actionEvent -> System.out.println("open up that pgn file!"));
         fileMenu.add(openPGN);
+
+        // does not correlate with other inst.
 
         final JMenuItem exitMenuItem = new JMenuItem("Exit");
         exitMenuItem.addActionListener(actionEvent -> System.exit(0));
@@ -83,33 +90,57 @@ public class Table {
         return fileMenu;
     }
 
-    private class BoardPanel extends JPanel{
+    private class BoardPanel extends JPanel {
 
         final List<TilePanel> boardTiles;
 
-        BoardPanel(){
+        BoardPanel() {
             super(new GridLayout(8, 8));
             boardTiles = new ArrayList<>();
+
+            //odd and even correspond respectively to first(the top-left  tile),third,fifth... second,fourth,sixth  tile of actual board
+            // up until;. the last tile(down-right tile)
+            boolean odd = true;
             for (int row = 0; row < 8; row++) {
                 for (int col = 0; col < 8; col++) {
                     final String tileCoordinate = characters[col] + digits[row];
                     final TilePanel tilePanel = new TilePanel(this, tileCoordinate);
+
+                    if (odd) {
+                        tilePanel.setBackground(new Color(232, 235, 239));
+
+                        if(col == 0){
+                            odd = false;
+                        }
+                        else if(!(col % 7 == 0)){
+                            odd = false;
+                        }
+                    } else {
+                        tilePanel.setBackground(new Color(125, 135, 150));
+                        if(col == 0){
+                            odd = true;
+                        }
+                        else if(!(col % 7 == 0)){
+                            odd = true;
+                        }
+                    }
+
                     boardTiles.add(tilePanel);
                     add(tilePanel);
                 }
             }
-            setPreferredSize(BOARD_PANEL_DIMENSION);
-            validate();
+            setSize(BOARD_PANEL_DIMENSION);
+//            validate();
         }
 
-        public void drawBoard(final Board board){
-            removeAll();
-            for(final TilePanel tilePanel: boardTiles){
+        public void drawBoard(final Board board) {
+//            removeAll(); remove only the captured piece
+            for (final TilePanel tilePanel : boardTiles) {
                 tilePanel.drawTile(board);
                 add(tilePanel);
             }
             validate();
-            repaint();
+//            repaint();
         }
     }
 
@@ -118,10 +149,9 @@ public class Table {
         private final String tileCoordinate;
 
         TilePanel(final BoardPanel boardPanel, final String tileCoordinate) {
-            super(new GridBagLayout());
             this.tileCoordinate = tileCoordinate;
-            setPreferredSize(TILE_PANEL_DIMENSION);
-            assignTileColor();
+            setSize(TILE_PANEL_DIMENSION);
+//            assignTileColor();
             assignTilePieceIcon(chessBoard);
 
             addMouseListener(new MouseListener() {
@@ -129,21 +159,22 @@ public class Table {
                 @Override
                 public void mouseClicked(MouseEvent mouseEvent) {
 
-                    if(isRightMouseButton(mouseEvent)){
+                    if (isRightMouseButton(mouseEvent)) {
                         sourceTile = null;
                         destinationTile = null;
                         humanMovedPiece = null;
-                    } else if(isLeftMouseButton(mouseEvent)){
-                        if(sourceTile == null){
+                    } else if (isLeftMouseButton(mouseEvent)) {
+                        if (sourceTile == null) {
                             sourceTile = chessBoard.accessTileByLetter(Character.toString(tileCoordinate.charAt(0)),
                                     Integer.parseInt(Character.toString(tileCoordinate.charAt(1))));
                             humanMovedPiece = sourceTile.getPiece(); //does not make the piece var null
 
-                            currentPlayer.setPieceToPlayWith(humanMovedPiece);
-
-                            if(humanMovedPiece == null){
+                            if(humanMovedPiece == null || currentPlayer.getAlliance() != sourceTile.getPiece().getAlliance()){
                                 sourceTile = null;
                             }
+
+                            currentPlayer.setPieceToPlayWith(humanMovedPiece);
+
                         } else {
                             destinationTile = chessBoard.accessTileByLetter(Character.toString(tileCoordinate.charAt(0)),
                                     Integer.parseInt(Character.toString(tileCoordinate.charAt(1))));
@@ -158,9 +189,9 @@ public class Table {
                             destinationTile = null;
                             humanMovedPiece = null;
 
-                            if(currentPlayer.equals(whitePlayer)){
+                            if (currentPlayer.equals(whitePlayer)) {
                                 currentPlayer = blackPlayer;
-                            } else if(currentPlayer.equals(blackPlayer)){
+                            } else if (currentPlayer.equals(blackPlayer)) {
                                 currentPlayer = whitePlayer;
                             }
 
@@ -195,40 +226,41 @@ public class Table {
                 }
             });
 
-            validate();
+//            validate();
         }
 
-        public void drawTile(final Board board){
-            assignTileColor();
+        public void drawTile(final Board board) {
             assignTilePieceIcon(board);
-            validate();
             repaint();
+//            validate();
+//            assignTileColor();
         }
 
-        private void assignTilePieceIcon(final Board board){
+        private void assignTilePieceIcon(final Board board) {
             this.removeAll();
 
             String letterPart = Character.toString(tileCoordinate.charAt(0));
             int numberPart = Integer.parseInt(Character.toString(tileCoordinate.charAt(1)));
-            if(board.accessTileByLetter(letterPart, numberPart).isTileOccupied()){
+            if (board.accessTileByLetter(letterPart, numberPart).isTileOccupied()) {
 
                 String allianceFirstLetter = board.accessTileByLetter(letterPart, numberPart).getPiece().getAlliance().toString().substring(0, 1);
                 String pieceFirstLetter = board.accessTileByLetter(letterPart, numberPart).getPiece().getPieceTitle();
 
-                try{
+                try {
                     final BufferedImage image = ImageIO.read(new File(defaultPieceImagesPath +
                             allianceFirstLetter + pieceFirstLetter + ".gif"));
                     add(new JLabel(new ImageIcon(image)));
-                } catch (IOException e){
+                } catch (IOException e) {
                     e.printStackTrace();
                 }
             }
         }
+    }
+}
+/*        private void assignTileColor() {
 
-        private void assignTileColor() {
-
-            int intPartOfTileCoordinate = Integer.parseInt(Character.toString(this.tileCoordinate.charAt(1)));
             char charPartOfTileCoordinate = this.tileCoordinate.charAt(0);
+            int intPartOfTileCoordinate = Integer.parseInt(Character.toString(this.tileCoordinate.charAt(1)));
 
             if (LAST_RANK + 1 == intPartOfTileCoordinate ||
                     SIXTH_RANK + 1 == intPartOfTileCoordinate ||
@@ -273,6 +305,5 @@ public class Table {
                 }
             }
         }
-        }
-}
+    */
 

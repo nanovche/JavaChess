@@ -2,26 +2,23 @@ package com.chess.engine.pieces;
 
 import com.chess.engine.Alliance;
 import com.chess.engine.Position;
-import com.chess.engine.piecemovedeterminators.PieceMoveDeterminator;
-import com.chess.engine.writer.ConsoleWriter;
-import com.chess.engine.Move;
+import com.chess.engine.piecemovevalidators.PieceMoveValidator;
 import com.chess.engine.board.Board;
 import com.chess.engine.board.Tile;
+import com.chess.engine.players.Player;
 
-import java.io.IOException;
-import java.util.List;
-
-public abstract class Piece {
+public class Piece {
 
     //add final to some fields?
 
+    private Player player;
     private final Alliance alliance;
     private Position initialPosition;
     private Position currentPosition;
-    private PieceMoveDeterminator pieceMoveDeterminator;
-    private boolean isInPlay;
-    private int pieceInterval;
+    private PieceMoveValidator pieceMoveValidator;
+    private MoveI moveExecutionType;
     private final String pieceTitle;
+    private boolean isInPlay;
 
     //validation input here??
     public Piece(String pieceTitle, Alliance alliance){
@@ -30,11 +27,18 @@ public abstract class Piece {
     }
     //validation input here??
     //pass
-    public Piece(String pieceTitle, Alliance alliance,Position currentPosition, Position initialPosition) {
+    public Piece(Player player, String pieceTitle, Alliance alliance,Position currentPosition, Position initialPosition,
+             MoveI move) {
         this(pieceTitle, alliance);
+        setPlayer(player);
         this.initialPosition = initialPosition;
         this.currentPosition = currentPosition;
         this.isInPlay = true;
+        this.moveExecutionType = move;
+    }
+
+    public void move(Board board,Piece piece,Tile sourceTile,Tile destinationTile){
+        moveExecutionType.move(player, board, piece, sourceTile, destinationTile);
     }
 
     //validation input for setters?
@@ -51,7 +55,7 @@ public abstract class Piece {
         this.initialPosition = initialPosition;
     }
 
-    //change setcurrent position name in clients
+    //change set current position name in clients
     public Position getCurrentPosition() {
         return currentPosition;
     }
@@ -60,11 +64,26 @@ public abstract class Piece {
         currentPosition.setCol(destinationCol);
     }
 
-    public PieceMoveDeterminator getPieceMoveDeterminator() {
-        return pieceMoveDeterminator;
+    public PieceMoveValidator getPieceMoveValidator() {
+        return pieceMoveValidator;
     }
-    public void setPieceMoveDeterminator(PieceMoveDeterminator pieceMoveDeterminator) {
-        this.pieceMoveDeterminator = pieceMoveDeterminator;
+    public void setPieceMoveValidator(PieceMoveValidator pieceMoveDeterminator) {
+        this.pieceMoveValidator = pieceMoveDeterminator;
+    }
+
+    public Player getHolderOfThisPiece() {
+        return player;
+    }
+    private void setPlayer(Player player) {
+        this.player = player;
+    }
+
+    public MoveI getMoveExecutionType() {
+        return moveExecutionType;
+    }
+
+    public void setMoveExecutionType(MoveI moveExecutionType) {
+        this.moveExecutionType = moveExecutionType;
     }
 
     public boolean isInPlay() {
@@ -74,35 +93,10 @@ public abstract class Piece {
         isInPlay = inPlay;
     }
 
-    public int getPieceInterval() {
-        return pieceInterval;
-    }
-    public void setPieceInterval(int pieceInterval) {
-        this.pieceInterval = pieceInterval;
-    }
-
     //setter for pieceTile?
     public String getPieceTitle() {
         return pieceTitle;
     }
-
-    public void printPossiblePieceMoves(List<Move> possiblePieceMoves){
-
-        //dependency injection//compare
-        ConsoleWriter consoleWriter = new ConsoleWriter();
-
-        for (Move move: possiblePieceMoves) {
-            consoleWriter.writeToConsole(move.toString());
-        }
-
-    }
-
-    public void attackPiece(Tile destinationTile){
-        destinationTile.removePieceFromPlay();
-        destinationTile.addPiece(this);
-    }
-
-    public abstract void move(Board board, Tile sourceTile, Tile destinationTile) throws IOException;
 
     //hashcode, equals, tostring?
 

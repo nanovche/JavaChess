@@ -1,12 +1,13 @@
-package com.chess.engine.piecemovedeterminators;
+package com.chess.engine.piecemovevalidators;
 
 import com.chess.engine.Alliance;
 import com.chess.engine.board.Board;
 import com.chess.engine.board.Tile;
+import com.chess.engine.players.Player;
 
-public class BishopMoveDeterminator implements PieceMoveDeterminator {
+public class BishopMoveValidator implements PieceMoveValidator {
 
-    public boolean isPieceMoveValid(Alliance alliance, Board board, Tile sourceTile, Tile destinationTile){
+    public boolean isPieceMoveValid(Alliance alliance, Board board, Tile sourceTile, Tile destinationTile, Player... players){
 
         int currentRow = sourceTile.getPosition().getRow();
         int currentCol = sourceTile.getPosition().getCol();

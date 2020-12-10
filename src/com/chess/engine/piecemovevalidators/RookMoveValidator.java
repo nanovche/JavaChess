@@ -1,13 +1,14 @@
-package com.chess.engine.piecemovedeterminators;
+package com.chess.engine.piecemovevalidators;
 
 import com.chess.engine.Alliance;
 import com.chess.engine.board.Board;
 import com.chess.engine.board.Tile;
+import com.chess.engine.players.Player;
 
 
-public class RookMoveDeterminator implements PieceMoveDeterminator {
+public class RookMoveValidator implements PieceMoveValidator {
 
-    public boolean isPieceMoveValid(Alliance alliance, Board board, Tile sourceTile, Tile destinationTile) {
+    public boolean isPieceMoveValid(Alliance alliance, Board board, Tile sourceTile, Tile destinationTile, Player... players) {
 
         if (sourceTile.getPosition().getRow() == destinationTile.getPosition().getRow()) {
 

@@ -1,92 +1,27 @@
-package com.chess.engine.piecemovedeterminators;
+package com.chess.engine.piecemovevalidators;
 
 import com.chess.engine.Alliance;
+import com.chess.engine.Position;
 import com.chess.engine.board.Board;
 import com.chess.engine.board.Tile;
 import com.chess.engine.pieces.*;
+import com.chess.engine.players.Player;
 
+import static com.chess.engine.utils.BoardUtils.tileIsInBoard;
 
-import java.util.ArrayList;
-import java.util.List;
+public class CheckValidator {
 
-import static com.chess.engine.utils.BoardUtils.*;
+    public static boolean isInCheck(Player player, Board board) {
 
-public class KingMoveDeterminator implements PieceMoveDeterminator {
-
-    @Override
-    public boolean isPieceMoveValid(Alliance alliance, Board board, Tile sourceTile, Tile destinationTile) {
-
-        int row = sourceTile.getPosition().getRow();
-        int col = sourceTile.getPosition().getCol();
-
-        List<Tile> possibleDestinationTiles = new ArrayList<>();
-
-
-        // vulnerable cast?
-        if(!((King) sourceTile.getPiece()).hasMoved()){
-            if(board.accessTile(row, col + 3).isTileOccupied()){
-                Piece piece = board.accessTile(row, col + 3).getPiece();
-                if(piece instanceof Rook){
-                    if(!((Rook)piece).hasMoved()){
-                        if(!board.accessTile(row, col + 1).isTileOccupied() && !board.accessTile(row, col + 2).isTileOccupied() &&
-                                !isInCheck(alliance, board.accessTile(row, col + 1), board) &&
-                                !isInCheck(alliance, board.accessTile(row, col + 2), board)){
-                            ((King)sourceTile.getPiece()).setShortCastle(true);
-                            return true;
-                        }
-                    }
-                }
-            }
-        }
-        if(!((King) sourceTile.getPiece()).hasMoved()){
-            if(board.accessTile(row, col - 4).isTileOccupied()){
-                Piece piece = board.accessTile(row, col - 4).getPiece();
-                if(piece instanceof Rook){
-                    if(!((Rook)piece).hasMoved()){
-                        if(!board.accessTile(row, col - 1).isTileOccupied() && !board.accessTile(row, col - 2).isTileOccupied() &&
-                                !board.accessTile(row, col - 2).isTileOccupied() && !isInCheck(alliance, board.accessTile(row, col - 1), board) &&
-                                !isInCheck(alliance, board.accessTile(row, col - 2), board) && !isInCheck(alliance, board.accessTile(row, col - 3), board)){
-                            ((King)sourceTile.getPiece()).setLongCastle(true);
-                            return true;
-                        }
-                    }
-                }
+        Position positionOfKing = null;
+        for (Piece currentPiece: player.getPieces()) {
+            if(currentPiece.getPieceTitle().equals("K")){
+                positionOfKing = currentPiece.getCurrentPosition();
             }
         }
 
-        for (int r = row - 1; r < 3; r++) {
-            for (int c = col - 1; c < 3; c++) {
-
-                if(r == row && c == col){
-                    continue;
-                }
-
-                if(tileIsInBoard(r, c)){
-                    possibleDestinationTiles.add(board.accessTile(r, c));
-                }
-            }
-        }
-
-        for (Tile possibleDestinationTile: possibleDestinationTiles) {
-
-            if(possibleDestinationTile.getPosition().getRow() == destinationTile.getPosition().getRow() &&
-            possibleDestinationTile.getPosition().getCol() == destinationTile.getPosition().getCol()){
-
-                if(isInCheck(alliance, destinationTile, board)){
-                    return false;
-                } else {
-                    if(destinationTile.isTileOccupied()){//if that tile is also under check/attack
-                        return destinationTile.getPiece().getAlliance() != alliance;
-                    } else {
-                        return true;
-                    }
-                }
-            }
-        }
-        return false;
-    }
-
-    private boolean isInCheck(Alliance alliance, Tile tile, Board board) {
+        Tile tile = board.accessTile(positionOfKing.getRow(), positionOfKing.getCol());
+        Alliance alliance = player.getAlliance();
 
         return tileIsUnderFileOrRankAttack(alliance, tile, board) ||
                 tileIsUnderBishopAttack(alliance, tile, board) ||
@@ -95,7 +30,7 @@ public class KingMoveDeterminator implements PieceMoveDeterminator {
     }
 
     //alliance of what?
-    private boolean tileIsUnderFileOrRankAttack(Alliance alliance, Tile tile, Board board) {
+    private static boolean tileIsUnderFileOrRankAttack(Alliance alliance, Tile tile, Board board) {
 
         int row = tile.getPosition().getRow() - 1;
         int col = tile.getPosition().getCol();
@@ -168,7 +103,7 @@ public class KingMoveDeterminator implements PieceMoveDeterminator {
 
         return false;
     }
-    private boolean tileIsUnderBishopAttack(Alliance alliance, Tile tile, Board board){
+    private static boolean tileIsUnderBishopAttack(Alliance alliance, Tile tile, Board board){
 
         int row = tile.getPosition().getRow() - 1;
         int col = tile.getPosition().getCol() - 1;
@@ -177,7 +112,7 @@ public class KingMoveDeterminator implements PieceMoveDeterminator {
             if(board.accessTile(row, col).isTileOccupied()){
                 Piece piece = board.accessTile(row, col).getPiece();
                 if(piece.getAlliance() != alliance){
-                    if(piece instanceof Bishop){
+                    if(piece instanceof Bishop || piece instanceof Queen){
                         return true;
                     }
                 } else {
@@ -195,7 +130,7 @@ public class KingMoveDeterminator implements PieceMoveDeterminator {
             if(board.accessTile(row, col).isTileOccupied()){
                 Piece piece = board.accessTile(row, col).getPiece();
                 if(piece.getAlliance() != alliance){
-                    if(piece instanceof Bishop){
+                    if(piece instanceof Bishop || piece instanceof Queen){
                         return true;
                     }
                 } else {
@@ -213,7 +148,7 @@ public class KingMoveDeterminator implements PieceMoveDeterminator {
             if(board.accessTile(row, col).isTileOccupied()){
                 Piece piece = board.accessTile(row, col).getPiece();
                 if(piece.getAlliance() != alliance){
-                    if(piece instanceof Bishop){
+                    if(piece instanceof Bishop || piece instanceof Queen){
                         return true;
                     }
                 } else {
@@ -231,7 +166,7 @@ public class KingMoveDeterminator implements PieceMoveDeterminator {
             if(board.accessTile(row, col).isTileOccupied()){
                 Piece piece = board.accessTile(row, col).getPiece();
                 if(piece.getAlliance() != alliance){
-                    if(piece instanceof Bishop){
+                    if(piece instanceof Bishop || piece instanceof Queen){
                         return true;
                     }
                 } else {
@@ -244,7 +179,7 @@ public class KingMoveDeterminator implements PieceMoveDeterminator {
 
         return false;
     }
-    private boolean tileIsUnderPawnAttack(Alliance alliance, Tile tile, Board board){
+    private static boolean tileIsUnderPawnAttack(Alliance alliance, Tile tile, Board board){
 
         if(alliance == Alliance.WHITE){
 
@@ -291,7 +226,7 @@ public class KingMoveDeterminator implements PieceMoveDeterminator {
 
         return false;
     }
-    private boolean tileIsUnderKnightAttack(Alliance alliance, Tile tile, Board board){
+    private static boolean tileIsUnderKnightAttack(Alliance alliance, Tile tile, Board board){
 
         int row = tile.getPosition().getRow();
         int col = tile.getPosition().getCol();
