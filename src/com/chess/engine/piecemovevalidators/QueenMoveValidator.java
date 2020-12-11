@@ -15,7 +15,7 @@ public class QueenMoveValidator implements PieceMoveValidator {
         this.bishopMoveValidator = new BishopMoveValidator();
     }
 
-    public boolean isPieceMoveValid(Alliance alliance, Board board, Tile sourceTile, Tile destinationTile, Player... players){
+    public boolean isPieceMoveValid(Alliance alliance, Board board, Tile sourceTile, Tile destinationTile){
 
         return rookMoveValidator.isPieceMoveValid(alliance, board, sourceTile, destinationTile)
         || bishopMoveValidator.isPieceMoveValid(alliance, board, sourceTile, destinationTile);

@@ -3,6 +3,7 @@ package com.chess.engine.pieces;
 import com.chess.engine.*;
 import com.chess.engine.piecemovevalidators.PawnMoveValidator;
 import com.chess.engine.players.Player;
+import com.chess.engine.typesofmoves.MoveI;
 
 public class Pawn extends Piece {
 

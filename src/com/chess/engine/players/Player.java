@@ -2,15 +2,10 @@ package com.chess.engine.players;
 
 import com.chess.engine.*;
 import com.chess.engine.board.Tile;
-import com.chess.engine.piecemovevalidators.KingMoveValidator;
-import com.chess.engine.utils.MessagesClass;
 import com.chess.engine.pieces.*;
 import com.chess.engine.board.Board;
-import com.chess.engine.reader.ConsoleReader;
-import com.chess.engine.writer.ConsoleWriter;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 
 import static com.chess.engine.piecemovevalidators.CheckValidator.isInCheck;
@@ -24,7 +19,15 @@ public class Player {
     private Piece pieceToPlayWith;
     private final List<Piece> pieces;
     private int consecutiveMove;
+    private boolean moved;
 
+    public boolean hasMoved() {
+        return moved;
+    }
+
+    private void setMoved(boolean moved) {
+        this.moved = moved;
+    }
 /*    ConsoleReader consoleReader;
     ConsoleWriter consoleWriter;*/
 
@@ -32,7 +35,7 @@ public class Player {
         this.nameOfPlayer = nameOfPlayer;
         this.alliance = alliance;
         this.pieces = pieces;
-        /*this.consoleWriter = consoleWriter;
+        /*this.consoleWritoter = consoleWriter;
         this.consoleReader = consoleReader;*/
     }
 
@@ -42,11 +45,10 @@ public class Player {
 
     public void movePiece(Board board, Tile sourceTile, Tile destinationTile) throws IOException{
 
-        if(isInCheck(this, board)){
-
-        } else if(pieceToPlayWith.getPieceMoveValidator().isPieceMoveValid(alliance, board, sourceTile, destinationTile)) {
+        if(pieceToPlayWith.getPieceMoveValidator().isPieceMoveValid(alliance, board, sourceTile, destinationTile)) {
+            moved = pieceToPlayWith.move(board, pieceToPlayWith, sourceTile, destinationTile);
+            this.setMoved(moved);
             updateConsecutiveMove();
-            pieceToPlayWith.move(board, pieceToPlayWith, sourceTile, destinationTile);
         }
     }
 
@@ -60,7 +62,7 @@ public class Player {
 
     public int getConsecutiveMove() { return consecutiveMove;}
 
-    public void updateConsecutiveMove() {
+    private void updateConsecutiveMove() {
         this.consecutiveMove += 1;
     }
 

@@ -17,7 +17,7 @@ import static com.chess.engine.utils.BoardUtils.*;
 public class KingMoveValidator implements PieceMoveValidator {
 
     @Override
-    public boolean isPieceMoveValid(Alliance alliance, Board board, Tile sourceTile, Tile destinationTile, Player... players) {
+    public boolean isPieceMoveValid(Alliance alliance, Board board, Tile sourceTile, Tile destinationTile) {
 
         int row = sourceTile.getPosition().getRow();
         int col = sourceTile.getPosition().getCol();
@@ -31,9 +31,9 @@ public class KingMoveValidator implements PieceMoveValidator {
                     if(!((Rook)piece).hasMoved()){
                         if(!board.accessTile(row, col + 1).isTileOccupied() &&
                            !board.accessTile(row, col + 2).isTileOccupied() &&
-                           !isInCheck(players[0], board) &&
-                           !isInCheck(players[0], board) &&
-                           !isInCheck(players[0], board)){
+                           !isInCheck(sourceTile, alliance, board) &&
+                           !isInCheck(sourceTile, alliance, board) &&
+                           !isInCheck(sourceTile, alliance, board)){
                            ((King)sourceTile.getPiece()).setShortCastle(true);
                            return true;
                         }
@@ -50,9 +50,9 @@ public class KingMoveValidator implements PieceMoveValidator {
                         if(!board.accessTile(row, col - 1).isTileOccupied() &&
                            !board.accessTile(row, col - 2).isTileOccupied() &&
                            !board.accessTile(row, col - 3).isTileOccupied() &&
-                           !isInCheck(players[0], board) &&
-                           !isInCheck(players[0], board) &&
-                           !isInCheck(players[0], board)){
+                           !isInCheck(sourceTile, alliance, board) &&
+                           !isInCheck(sourceTile, alliance, board) &&
+                           !isInCheck(sourceTile, alliance, board)){
                            ((King)sourceTile.getPiece()).setLongCastle(true);
                            return true;
                         }
@@ -61,7 +61,7 @@ public class KingMoveValidator implements PieceMoveValidator {
             }
         }
 
-        return isInCheck(players[0], board);
+        return isInCheck(sourceTile, alliance, board);
 
     }
 

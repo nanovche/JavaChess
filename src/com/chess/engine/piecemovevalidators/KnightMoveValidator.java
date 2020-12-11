@@ -12,7 +12,7 @@ import static com.chess.engine.utils.BoardUtils.tileIsInBoard;
 
 public class KnightMoveValidator implements PieceMoveValidator {
 
-    public boolean isPieceMoveValid(Alliance alliance, Board board, Tile sourceTile, Tile destinationTile, Player... players){
+    public boolean isPieceMoveValid(Alliance alliance, Board board, Tile sourceTile, Tile destinationTile){
 
         int currentRow = sourceTile.getPosition().getRow();
         int currentCol = sourceTile.getPosition().getCol();

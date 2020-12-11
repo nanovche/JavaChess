@@ -7,7 +7,7 @@ import com.chess.engine.players.Player;
 
 public class BishopMoveValidator implements PieceMoveValidator {
 
-    public boolean isPieceMoveValid(Alliance alliance, Board board, Tile sourceTile, Tile destinationTile, Player... players){
+    public boolean isPieceMoveValid(Alliance alliance, Board board, Tile sourceTile, Tile destinationTile){
 
         int currentRow = sourceTile.getPosition().getRow();
         int currentCol = sourceTile.getPosition().getCol();

@@ -189,10 +189,12 @@ public class Table {
                             destinationTile = null;
                             humanMovedPiece = null;
 
-                            if (currentPlayer.equals(whitePlayer)) {
-                                currentPlayer = blackPlayer;
-                            } else if (currentPlayer.equals(blackPlayer)) {
-                                currentPlayer = whitePlayer;
+                            if(currentPlayer.hasMoved()){
+                                if (currentPlayer.equals(whitePlayer)) {
+                                    currentPlayer = blackPlayer;
+                                } else if (currentPlayer.equals(blackPlayer)) {
+                                    currentPlayer = whitePlayer;
+                                }
                             }
 
                             SwingUtilities.invokeLater(new Runnable() {

@@ -1,10 +1,11 @@
 package com.chess.engine;
 
 import com.chess.engine.board.Board;
-import com.chess.engine.piecemovevalidators.PawnMoveValidator;
-import com.chess.engine.piecemovevalidators.PieceMoveValidator;
 import com.chess.engine.pieces.*;
 import com.chess.engine.players.Player;
+import com.chess.engine.typesofmoves.GenericPieceMove;
+import com.chess.engine.typesofmoves.SpecialKingMove;
+import com.chess.engine.typesofmoves.SpecialRookMove;
 import com.chess.engine.utils.BoardUtils;
 
 import static com.chess.engine.utils.BoardUtils.*;
@@ -13,6 +14,7 @@ import static com.chess.engine.utils.BoardUtils.FIFTH_FILE;
 public class PiecesInitializer {
 
     public static void initializePieces(Board board, Player whitePlayer, Player blackPlayer){
+
         initializeRooks(board, whitePlayer, blackPlayer);
         initializeKnights(board, whitePlayer, blackPlayer);
         initializeBishops(board, whitePlayer, blackPlayer);

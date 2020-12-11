@@ -1,13 +1,15 @@
-package com.chess.engine.pieces;
+package com.chess.engine.typesofmoves;
 
 import com.chess.engine.board.Board;
 import com.chess.engine.board.Tile;
+import com.chess.engine.pieces.King;
+import com.chess.engine.pieces.Piece;
 import com.chess.engine.players.Player;
 
-public class SpecialKingMove implements MoveI{
+public class SpecialKingMove extends GenericPieceMove {
 
     @Override
-    public void move(Player player, Board board, Piece piece, Tile sourceTile, Tile destinationTile) {
+    public boolean move(Player player, Board board, Piece piece, Tile sourceTile, Tile destinationTile) {
 
         sourceTile.getPieceFromTile();
 
@@ -22,5 +24,6 @@ public class SpecialKingMove implements MoveI{
         }
         destinationTile.addPiece(piece);
         ((King)piece).setMoved(true);
+        return true;
     }
 }

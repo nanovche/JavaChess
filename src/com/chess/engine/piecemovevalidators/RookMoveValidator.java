@@ -8,7 +8,7 @@ import com.chess.engine.players.Player;
 
 public class RookMoveValidator implements PieceMoveValidator {
 
-    public boolean isPieceMoveValid(Alliance alliance, Board board, Tile sourceTile, Tile destinationTile, Player... players) {
+    public boolean isPieceMoveValid(Alliance alliance, Board board, Tile sourceTile, Tile destinationTile) {
 
         if (sourceTile.getPosition().getRow() == destinationTile.getPosition().getRow()) {
 

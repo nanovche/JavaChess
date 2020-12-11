@@ -28,6 +28,13 @@ public class CheckValidator {
                 tileIsUnderKnightAttack(alliance, tile, board) ||
                 tileIsUnderPawnAttack(alliance, tile, board);
     }
+    public static boolean isInCheck(Tile tile, Alliance alliance, Board board) {
+
+        return tileIsUnderFileOrRankAttack(alliance, tile, board) ||
+                tileIsUnderBishopAttack(alliance, tile, board) ||
+                tileIsUnderKnightAttack(alliance, tile, board) ||
+                tileIsUnderPawnAttack(alliance, tile, board);
+    }
 
     //alliance of what?
     private static boolean tileIsUnderFileOrRankAttack(Alliance alliance, Tile tile, Board board) {

@@ -4,6 +4,7 @@ import com.chess.engine.Alliance;
 import com.chess.engine.Position;
 import com.chess.engine.piecemovevalidators.QueenMoveValidator;
 import com.chess.engine.players.Player;
+import com.chess.engine.typesofmoves.MoveI;
 
 public class Queen extends Piece{
 

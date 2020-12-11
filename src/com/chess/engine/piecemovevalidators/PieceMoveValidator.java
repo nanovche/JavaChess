@@ -9,6 +9,6 @@ import com.chess.engine.players.Player;
 
 public interface PieceMoveValidator {
 
-    boolean isPieceMoveValid(Alliance alliance, Board board, Tile sourceTile, Tile destinationTile, Player... players);
+    boolean isPieceMoveValid(Alliance alliance, Board board, Tile sourceTile, Tile destinationTile);
 
 }

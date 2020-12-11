@@ -1,11 +1,15 @@
 package com.chess.engine.pieces;
 
 import com.chess.engine.Alliance;
+import com.chess.engine.PieceType;
 import com.chess.engine.Position;
 import com.chess.engine.piecemovevalidators.PieceMoveValidator;
 import com.chess.engine.board.Board;
 import com.chess.engine.board.Tile;
 import com.chess.engine.players.Player;
+import com.chess.engine.typesofmoves.MoveI;
+
+import static com.chess.engine.PieceType.*;
 
 public class Piece {
 
@@ -37,8 +41,27 @@ public class Piece {
         this.moveExecutionType = move;
     }
 
-    public void move(Board board,Piece piece,Tile sourceTile,Tile destinationTile){
-        moveExecutionType.move(player, board, piece, sourceTile, destinationTile);
+    public static Piece getInstance(Player player, String pieceTitle, Alliance alliance,
+                                    Position currentPosition, Position initialPosition, MoveI moveExecutionType, PieceType type){
+
+        if(type.equals(KING)){
+            return new King(player, pieceTitle, alliance, currentPosition, initialPosition, moveExecutionType);
+        } else  if(type.equals(QUEEN)){
+            return new Queen(player, pieceTitle, alliance, currentPosition, initialPosition, moveExecutionType);
+        } else  if(type.equals(BISHOP)){
+            return new Bishop(player, pieceTitle, alliance, currentPosition, initialPosition, moveExecutionType);
+        } else  if(type.equals(KNIGHT)){
+            return new Knight(player, pieceTitle, alliance, currentPosition, initialPosition, moveExecutionType);
+        } else  if(type.equals(ROOK)){
+            return new Rook(player, pieceTitle, alliance, currentPosition, initialPosition, moveExecutionType);
+        } else {
+            return new Pawn(player, pieceTitle, alliance, currentPosition, initialPosition, moveExecutionType);
+        }
+
+    }
+
+    public boolean move(Board board,Piece piece,Tile sourceTile,Tile destinationTile){
+        return moveExecutionType.move(player, board, piece, sourceTile, destinationTile);
     }
 
     //validation input for setters?
