@@ -2,20 +2,17 @@ package com.chess.engine.pieces;
 
 import com.chess.engine.Alliance;
 import com.chess.engine.Position;
-import com.chess.engine.piecemovevalidators.KingMoveValidator;
+import com.chess.engine.calculatorofpiecemoves.CalculatorOfMoves;
 import com.chess.engine.players.Player;
-import com.chess.engine.typesofmoves.MoveI;
 
 public class King extends Piece {
 
-    private boolean isShortCastle;
-    private boolean isLongCastle;
     private boolean moved;
+    private boolean castled;
 
     public King(Player player, String pieceTitle, Alliance alliance, Position currentPosition, Position initialPosition,
-                MoveI moveExecutionType) {
-        super(player, pieceTitle, alliance, currentPosition, initialPosition, moveExecutionType);
-        setPieceMoveValidator(new KingMoveValidator());
+                CalculatorOfMoves calculatorOfMoves) {
+        super(player, pieceTitle, alliance, currentPosition, initialPosition, calculatorOfMoves);
     }
 
     public King(String pieceTitle, Alliance alliance) {
@@ -29,14 +26,11 @@ public class King extends Piece {
         this.moved = moved;
     }
 
-    //naming?
-    public boolean hasShortCastled() { return isShortCastle;}
-    public boolean hasLongCastled() { return isLongCastle; }
-    public void setShortCastle(boolean shortCastle) {
-        isShortCastle = shortCastle;
+    public boolean hasCastled(){
+        return castled;
     }
-    public void setLongCastle(boolean longCastle) {
-        isLongCastle = longCastle;
+    public void setCastled(boolean castled){
+        this.castled = castled;
     }
 
 }

@@ -6,27 +6,18 @@ import com.chess.engine.Position;
 public class Tile {
 
     private Piece pieceOnTile;
+    private boolean occupiedTile;
     private final Position position;
     private final String tileCoordinate;
-    private boolean occupiedTile;
 
     public Tile(final String tileCoordinate, Position position) {
         this.tileCoordinate = tileCoordinate;
         this.position = position;
     }
 
-    public Position getPosition() {
-        return position;
-    }
-
     public void addPiece(Piece piece){
         pieceOnTile = piece;
         occupiedTile = true;
-    }
-
-    //rename to better name (show etc)
-    public Piece getPiece(){
-        return pieceOnTile;
     }
 
     public Piece getPieceFromTile(){
@@ -37,9 +28,18 @@ public class Tile {
     }
 
     public void removePieceFromPlay(){
-        pieceOnTile.setInPlay(false);
+        pieceOnTile.setInPlay(false); //?
         this.pieceOnTile = null;
         this.occupiedTile = false;
+    }
+
+    //rename to better name (show etc)
+    public Position getPosition() {
+        return position;
+    }
+
+    public Piece getPiece(){
+        return pieceOnTile;
     }
 
     String getTileCoordinate(){

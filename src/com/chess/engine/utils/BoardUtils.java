@@ -2,7 +2,15 @@ package com.chess.engine.utils;
 
 public class BoardUtils {
 
+    public static final int THREE = 3;
+    public static final int FOUR = 4;
+
     //change to short/byte
+    public static final int POSITIVE = 1;
+    public static final int TWO_POSITIVE = 2;
+    public static final int NEGATIVE = -1;
+    public static final int TWO_NEGATIVE = -2;
+    public static final int ZERO = 0;
 
     //change to regular number flow
     public static final int FIRST_RANK = 0;
@@ -32,7 +40,7 @@ public class BoardUtils {
     public static final String[] characters = {"A","B","C","D","E","F","G","H"};
     public static final String[] digits = {"8","7","6","5","4","3","2","1"};
 
-    public static boolean tileIsInBoard(int rowBound, int colBound){
+    public static boolean isTileInBoard(int rowBound, int colBound){
         return (rowBound >= FIRST_RANK && rowBound <= LAST_RANK) &&
                 colBound >= FIRST_RANK && colBound <= LAST_RANK;
     }

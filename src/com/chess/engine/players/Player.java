@@ -2,17 +2,14 @@ package com.chess.engine.players;
 
 import com.chess.engine.*;
 import com.chess.engine.board.Tile;
+import com.chess.engine.calculatorofpiecemoves.CheckValidator;
 import com.chess.engine.pieces.*;
 import com.chess.engine.board.Board;
 
 import java.io.IOException;
 import java.util.List;
 
-import static com.chess.engine.piecemovevalidators.CheckValidator.isInCheck;
-
 public class Player {
-
-    //enhanced and normal move for pawn
 
     private final String nameOfPlayer;
     private final Alliance alliance;
@@ -21,38 +18,58 @@ public class Player {
     private int consecutiveMove;
     private boolean moved;
 
-    public boolean hasMoved() {
-        return moved;
-    }
-
-    private void setMoved(boolean moved) {
-        this.moved = moved;
-    }
-/*    ConsoleReader consoleReader;
-    ConsoleWriter consoleWriter;*/
-
     public Player(String nameOfPlayer, Alliance alliance, List<Piece> pieces/*, ConsoleWriter consoleWriter, ConsoleReader consoleReader*/) {
         this.nameOfPlayer = nameOfPlayer;
         this.alliance = alliance;
         this.pieces = pieces;
-        /*this.consoleWritoter = consoleWriter;
-        this.consoleReader = consoleReader;*/
     }
 
     public void bindPieceToPlayer(Piece piece) {
         pieces.add(piece);
     }
 
-    public void movePiece(Board board, Tile sourceTile, Tile destinationTile) throws IOException{
+    private void move(Tile sourceTile, Tile destinationTile, Board board){
 
-        if(pieceToPlayWith.getPieceMoveValidator().isPieceMoveValid(alliance, board, sourceTile, destinationTile)) {
-            moved = pieceToPlayWith.move(board, pieceToPlayWith, sourceTile, destinationTile);
-            this.setMoved(moved);
+        List<Tile> validDestinationTiles = pieceToPlayWith.getCalculatorOfMoves().getValidDestinationTiles(board, sourceTile);
+        if (validDestinationTiles.contains(destinationTile)) {
+
+            pieceToPlayWith.move(sourceTile, destinationTile, board);
+
+            this.setMoved(true); // first time false - > then sets it to true and has no effect..
             updateConsecutiveMove();
         }
     }
 
+    public void movePiece(Board board, Tile sourceTile, Tile destinationTile) throws IOException {
+
+        if (CheckValidator.isUnderAttack(this, board)) {
+            if (CheckValidator.isMate(board, this)) {
+                System.exit(0);
+            } else {
+                if(pieceToPlayWith instanceof King && !CheckValidator.isUnderAttack(destinationTile, pieceToPlayWith.getAlliance(), board)){
+                    move(sourceTile, destinationTile, board);
+                } else {
+                    if(!CheckValidator.isDoubleCheck(board, pieceToPlayWith.getAlliance(), sourceTile)){
+                        if(CheckValidator.findTilesBetweenAttackerInclusiveAndKing(this, board).contains(destinationTile)){
+                            move(sourceTile, destinationTile, board);
+                        }
+                    }
+                }
+            }
+        }
+        else {
+            move(sourceTile, destinationTile, board);
+        }
+    }
+
     //validation
+    public boolean hasMoved() {
+        return moved;
+    }
+    public void setMoved(boolean moved) {
+        this.moved = moved;
+    }
+
     public Piece getPieceToPlayWith() {
         return pieceToPlayWith;
     }
@@ -60,8 +77,9 @@ public class Player {
         this.pieceToPlayWith = pieceToPlayWith;
     }
 
-    public int getConsecutiveMove() { return consecutiveMove;}
-
+    public int getConsecutiveMove() {
+        return consecutiveMove;
+    }
     private void updateConsecutiveMove() {
         this.consecutiveMove += 1;
     }

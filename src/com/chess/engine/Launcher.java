@@ -3,8 +3,6 @@ package com.chess.engine;
 import com.chess.engine.board.Board;
 import com.chess.engine.board.Tile;
 import com.chess.engine.players.Player;
-import com.chess.engine.reader.ConsoleReader;
-import com.chess.engine.writer.ConsoleWriter;
 import gui.Table;
 
 import java.io.IOException;
@@ -19,19 +17,12 @@ public class Launcher {
         Table table = new Table();
 
     }
-    private static boolean isMate() {
-        return true;
-    }
 
     public static List<Player> createPlayers(){
 
-        /*
-        ConsoleWriter consoleWriter = new ConsoleWriter();
-        ConsoleReader consoleReader = new ConsoleReader();
-*/
         List<Player> players = new ArrayList<>();
-        Player whitePlayer = new Player("Asen", Alliance.WHITE, new ArrayList<>()/*, consoleWriter, consoleReader*/);
-        Player blackPlayer = new Player("Petar", Alliance.BLACK, new ArrayList<>()/*,consoleWriter, consoleReader*/);
+        Player whitePlayer = new Player("Asen", Alliance.WHITE, new ArrayList<>());
+        Player blackPlayer = new Player("Petar", Alliance.BLACK, new ArrayList<>());
         players.add(whitePlayer);
         players.add(blackPlayer);
         return players;

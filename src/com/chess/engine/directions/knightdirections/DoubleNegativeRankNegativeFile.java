@@ -1,0 +1,12 @@
+package com.chess.engine.directions.knightdirections;
+
+import com.chess.engine.directions.Direction;
+
+import static com.chess.engine.utils.BoardUtils.NEGATIVE;
+import static com.chess.engine.utils.BoardUtils.TWO_NEGATIVE;
+
+public class DoubleNegativeRankNegativeFile extends Direction {
+    public DoubleNegativeRankNegativeFile() {
+        super(TWO_NEGATIVE, NEGATIVE);
+    }
+}

@@ -9,6 +9,7 @@ import com.chess.engine.players.Player;
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.image.BufferedImage;
@@ -155,7 +156,6 @@ public class Table {
             assignTilePieceIcon(chessBoard);
 
             addMouseListener(new MouseListener() {
-
                 @Override
                 public void mouseClicked(MouseEvent mouseEvent) {
 
@@ -192,8 +192,10 @@ public class Table {
                             if(currentPlayer.hasMoved()){
                                 if (currentPlayer.equals(whitePlayer)) {
                                     currentPlayer = blackPlayer;
+                                    whitePlayer.setMoved(false);
                                 } else if (currentPlayer.equals(blackPlayer)) {
                                     currentPlayer = whitePlayer;
+                                    blackPlayer.setMoved(false);
                                 }
                             }
 
