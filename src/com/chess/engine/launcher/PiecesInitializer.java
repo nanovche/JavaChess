@@ -1,5 +1,7 @@
-package com.chess.engine;
+package com.chess.engine.launcher;
 
+import com.chess.engine.enums.Alliance;
+import com.chess.engine.position.Position;
 import com.chess.engine.board.Board;
 import com.chess.engine.calculatorofpiecemoves.CalculatorOfGenericMoves;
 import com.chess.engine.calculatorofpiecemoves.CalculatorOfKingMoves;

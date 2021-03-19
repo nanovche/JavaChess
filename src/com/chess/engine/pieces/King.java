@@ -1,7 +1,8 @@
 package com.chess.engine.pieces;
 
-import com.chess.engine.Alliance;
-import com.chess.engine.Position;
+import com.chess.engine.enums.Alliance;
+import com.chess.engine.moves.ShortCastleI;
+import com.chess.engine.position.Position;
 import com.chess.engine.calculatorofpiecemoves.CalculatorOfMoves;
 import com.chess.engine.players.Player;
 

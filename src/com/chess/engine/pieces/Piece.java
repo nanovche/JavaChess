@@ -1,8 +1,8 @@
 package com.chess.engine.pieces;
 
-import com.chess.engine.Alliance;
-import com.chess.engine.PieceType;
-import com.chess.engine.Position;
+import com.chess.engine.enums.Alliance;
+import com.chess.engine.enums.PieceType;
+import com.chess.engine.position.Position;
 import com.chess.engine.board.Board;
 import com.chess.engine.board.Tile;
 import com.chess.engine.calculatorofpiecemoves.CalculatorOfMoves;
@@ -13,7 +13,7 @@ import com.chess.engine.players.Player;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.chess.engine.PieceType.*;
+import static com.chess.engine.enums.PieceType.*;
 
 public class Piece {
 
@@ -75,12 +75,11 @@ public class Piece {
         if(destinationTile.isTileOccupied()){
             piece.typeOfMove = new AttackingMove();
         } else {
-
             if(piece instanceof King){
-                if(destinationTile.getPosition().getCol() == sourceTile.getPosition().getCol() + 1){
+                if(destinationTile.getPosition().getCol() == sourceTile.getPosition().getCol() + 2){
                     piece.typeOfMove = new ShortCastlingMove();
                     ((King)piece).setCastled(true);
-                } else if(destinationTile.getPosition().getCol() == sourceTile.getPosition().getCol() - 1){
+                } else if(destinationTile.getPosition().getCol() == sourceTile.getPosition().getCol() - 2){
                     piece.typeOfMove = new LongCastlingMove();
                     ((King)piece).setCastled(true);
                 }
@@ -89,9 +88,11 @@ public class Piece {
 
                 if(((Pawn)piece).getAnPassant()){
                     if(destinationTile.getPosition().getCol() != sourceTile.getPosition().getCol()){
+                        //dependency on implementation
                         piece.typeOfMove = new EnPassantMove();
                     }
                 }
+                //dependency on implementation
                 piece.typeOfMove = new RegularMove();
                 ((Pawn)piece).setMoved(true);
             } else if(piece instanceof Rook){
@@ -146,8 +147,9 @@ public class Piece {
         currentPosition.setCol(destinationCol);
     }
 
+    /* return defensive copy, so client has no reference to it */
     public List<Direction> getPieceDirections() {
-        return pieceDirections;
+        return new ArrayList<>(pieceDirections);
     }
     public void addPieceDirection(Direction direction) {
         pieceDirections.add(direction);

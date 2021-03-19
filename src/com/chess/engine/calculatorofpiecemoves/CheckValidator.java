@@ -1,7 +1,7 @@
 package com.chess.engine.calculatorofpiecemoves;
 
-import com.chess.engine.Alliance;
-import com.chess.engine.Position;
+import com.chess.engine.enums.Alliance;
+import com.chess.engine.position.Position;
 import com.chess.engine.board.Board;
 import com.chess.engine.board.Tile;
 import com.chess.engine.pieces.*;
@@ -26,6 +26,11 @@ public class CheckValidator {
     private static final List<Piece> piecesOnBottomLeftDiagonal = new ArrayList<>();
     private static final List<Piece> piecesOnTopLeftDiagonal = new ArrayList<>();
 
+
+    /*If the corresponding collection is not empty, it means we have pieces on that line of the board(rank, file or diagonal),
+    * We check whether only the first piece closest to the king(the first in the collection) is an attacker since pieces in
+    * chess cannot attack over other pieces(except the knight). That's why all attacks(if any) from knights are added(max two).
+    * If any attackers are found they are added to the list.  */
     public static List<Tile> getTilesFromWhichAttacksArePerformed(Board board, Alliance allianceOfDefender, Tile... tile) {
 
         List<Tile> attackingTiles = new ArrayList<>();
@@ -305,6 +310,8 @@ public class CheckValidator {
     private static boolean isValidStraightAttacker(Piece piece, Alliance allianceOfDefender){
         return (piece instanceof Rook || piece instanceof Queen) && (piece.getAlliance() != allianceOfDefender);
     }
+
+
     private static boolean isValidDiagonalAttacker(Piece piece, Alliance allianceOfDefender, Tile tile){
 
         Tile tileOfDefendingPiece = tile;
@@ -333,6 +340,10 @@ public class CheckValidator {
 
     }
 
+
+    /*These three methods collect all the pieces from lines and diagonals which come into the king's square.
+    * They are used to determine whether a piece of the king's alliance is allowed to move since that piece may be
+    * pinned and discover a check on the king.*/
     private static void collectPiecesFromRanksAndFiles(Tile tile, Board board) {
 
         int row = tile.getPosition().getRow() - 1;
@@ -434,6 +445,7 @@ public class CheckValidator {
         }
 
     }
+    //why do i collect these?
     private static void collectKnightsAttacks(Alliance alliance, Tile tile, Board board){
 
         int row = tile.getPosition().getRow();

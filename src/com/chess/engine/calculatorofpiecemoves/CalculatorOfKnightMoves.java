@@ -1,11 +1,10 @@
 package com.chess.engine.calculatorofpiecemoves;
 
-import com.chess.engine.Alliance;
+import com.chess.engine.enums.Alliance;
 import com.chess.engine.board.Board;
 import com.chess.engine.board.Tile;
 import com.chess.engine.directions.Direction;
 import com.chess.engine.pieces.Piece;
-import com.chess.engine.utils.BoardUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -40,11 +39,5 @@ public class CalculatorOfKnightMoves extends CalculatorOfGenericMoves implements
             }
         }
         return validDestinationTiles;
-    }
-
-
-    @Override
-    public List<Tile> getValidDestinationTilesWhenPinned() {
-        return new ArrayList<>();
     }
 }

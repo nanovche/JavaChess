@@ -6,12 +6,10 @@ import com.chess.engine.pieces.Piece;
 import com.chess.engine.utils.BoardUtils;
 
 
-public class ShortCastlingMove implements MoveTypeI{
+public class ShortCastlingMove extends RegularMove implements MoveTypeI{
 
     @Override
     public void move(Tile sourceTile, Tile destinationTile, Board... board) {
-
-        Piece king = sourceTile.getPieceFromTile();
 
         if(board != null){
             int row = sourceTile.getPosition().getRow();
@@ -20,14 +18,12 @@ public class ShortCastlingMove implements MoveTypeI{
 
             row = sourceTile.getPosition().getRow();
             col = sourceTile.getPosition().getCol() + 1;
-            Tile rookTile = board[0].accessTile(row, col);
-            rookTile.addPiece(rook);
+            Tile rookDestinationTile = board[0].accessTile(row, col);
+            rookDestinationTile.addPiece(rook);
             rook.setCurrentPosition(row, col);
         }
 
-        destinationTile.addPiece(king);
-        king.setCurrentPosition(destinationTile.getPosition().getRow(), destinationTile.getPosition().getCol());
-
+        super.move(sourceTile, destinationTile, board);
 
     }
 

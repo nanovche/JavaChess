@@ -1,6 +1,6 @@
 package com.chess.engine.calculatorofpiecemoves;
 
-import com.chess.engine.Alliance;
+import com.chess.engine.enums.Alliance;
 import com.chess.engine.board.Board;
 import com.chess.engine.board.Tile;
 import com.chess.engine.directions.Direction;
@@ -29,8 +29,6 @@ public class CalculatorOfGenericMoves implements CalculatorOfMoves, CalculatorOf
 
         List<Tile> validDestinationTiles = new ArrayList<>(); // inject it empty from client and return it filled?
         if(CheckValidator.isPinned(piece)){
-
-            return getValidDestinationTilesWhenPinned();
 
         }
 

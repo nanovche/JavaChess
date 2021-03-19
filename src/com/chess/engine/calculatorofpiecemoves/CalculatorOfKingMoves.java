@@ -1,7 +1,7 @@
 package com.chess.engine.calculatorofpiecemoves;
 
-import com.chess.engine.Alliance;
-import com.chess.engine.Position;
+import com.chess.engine.enums.Alliance;
+import com.chess.engine.position.Position;
 import com.chess.engine.board.Board;
 import com.chess.engine.board.Tile;
 import com.chess.engine.directions.Direction;

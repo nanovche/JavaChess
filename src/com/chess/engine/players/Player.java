@@ -1,8 +1,8 @@
 package com.chess.engine.players;
 
-import com.chess.engine.*;
 import com.chess.engine.board.Tile;
 import com.chess.engine.calculatorofpiecemoves.CheckValidator;
+import com.chess.engine.enums.Alliance;
 import com.chess.engine.pieces.*;
 import com.chess.engine.board.Board;
 
@@ -13,6 +13,8 @@ public class Player {
 
     private final String nameOfPlayer;
     private final Alliance alliance;
+
+    /*denotes which piece currently the player is moving/playing with.*/
     private Piece pieceToPlayWith;
     private final List<Piece> pieces;
     private int consecutiveMove;
@@ -30,9 +32,12 @@ public class Player {
 
     private void move(Tile sourceTile, Tile destinationTile, Board board){
 
+        /*call - pieceToPlayWith.getCalculatorOfMoves().getValidDestinationTiles(board, sourceTile)
+        violates law of closest friends */
         List<Tile> validDestinationTiles = pieceToPlayWith.getCalculatorOfMoves().getValidDestinationTiles(board, sourceTile);
         if (validDestinationTiles.contains(destinationTile)) {
 
+            //move responsibility goes to piece
             pieceToPlayWith.move(sourceTile, destinationTile, board);
 
             this.setMoved(true); // first time false - > then sets it to true and has no effect..

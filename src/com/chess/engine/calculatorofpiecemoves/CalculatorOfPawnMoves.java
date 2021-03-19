@@ -1,12 +1,11 @@
 package com.chess.engine.calculatorofpiecemoves;
 
-import com.chess.engine.Alliance;
+import com.chess.engine.enums.Alliance;
 import com.chess.engine.board.Board;
 import com.chess.engine.board.Tile;
 import com.chess.engine.directions.Direction;
 import com.chess.engine.pieces.Pawn;
 import com.chess.engine.pieces.Piece;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -23,24 +22,27 @@ public class CalculatorOfPawnMoves extends CalculatorOfGenericMoves implements C
         Piece movingPiece = sourceTile.getPiece();
         Alliance allianceOfMovingPiece = movingPiece.getAlliance();
 
-        // -1 -1 \ -1 0 \ -2 0 \ -1 1
-        // 1 -1 \ 1 0 \ 2 0  \ 1 1
-
         if(CheckValidator.isPinned(movingPiece)){
             return new ArrayList<>(); //?
         }
 
         List<Tile> validDestinationTiles = new ArrayList<>(); // inject it empty from client and return it filled?
 
+        /* check over every possible direction for the pawn and adds it
+        * to the list if it is a valid one */
         for (Direction direction : directions) {
             int destinationRow = sourceRow + direction.getRowDir();
             int destinationCol = sourceCol + direction.getColDir();
             if (isTileInBoard(destinationRow, destinationCol)) {
                 Tile destinationTile = board.accessTile(destinationRow, destinationCol);
+
+                /* if different pawn will change its position via capturing move */
                 if (sourceCol != destinationCol) {
                     if (destinationTile.isTileOccupied() && destinationTile.getPiece().getAlliance() != allianceOfMovingPiece) {
                         validDestinationTiles.add(destinationTile);
-                    } else if (!destinationTile.isTileOccupied()) {
+                    }
+                    /*  en passant - to refactor */
+                    else if (!destinationTile.isTileOccupied()) {
 
                         Tile tileOfPieceToBeCapturedViaEnPassant = board.accessTile(sourceRow, destinationCol);
                         Piece pieceToBeCapturedViaEnPassant = tileOfPieceToBeCapturedViaEnPassant.getPiece();
@@ -51,7 +53,7 @@ public class CalculatorOfPawnMoves extends CalculatorOfGenericMoves implements C
                                     movingPiece.getAlliance() == Alliance.WHITE &&
                                     movingPiece.getHolderOfThisPiece().getConsecutiveMove() ==
                                             pieceToBeCapturedViaEnPassant.getHolderOfThisPiece().getConsecutiveMove())) {
-                                ((Pawn) movingPiece).setEnPassant(true);
+                                ((Pawn)movingPiece).setEnPassant(true);
                                 validDestinationTiles.add(destinationTile);
 
 
@@ -64,12 +66,22 @@ public class CalculatorOfPawnMoves extends CalculatorOfGenericMoves implements C
                             }
                         }
                     }
-                } else {
+                }
+                /* Pawn forward moves */
+                else {
+
+                    /*Math abs is used since black and white forward pawn directions are implemented
+                    * as follows: -1, -2(white) to move up the board; 1, 2(black)  to move down the board */
                     if (Math.abs(direction.getRowDir()) == 1) {
                         if (!destinationTile.isTileOccupied()) {
                             validDestinationTiles.add(destinationTile);
                         }
-                    } else if (!((Pawn)movingPiece).hasMoved() && Math.abs(direction.getRowDir()) == 2) {
+
+                    }
+                    /* Enhanced pawn move: checks whether pawn has moved from its initial position and its direction is
+                     * Math.abs(2). If both are true we check whether the jumped over tile
+                     * and the destination tile are occupied. If not -> move is allowed. */
+                    else if (!((Pawn)movingPiece).hasMoved() && Math.abs(direction.getRowDir()) == 2) {
                         Tile jumpedOverTile = board.accessTile(destinationRow - 1, destinationCol);
                         if (!destinationTile.isTileOccupied() && !jumpedOverTile.isTileOccupied()) {
                             validDestinationTiles.add(destinationTile);

@@ -1,18 +1,29 @@
 package com.chess.engine.board;
 
 import com.chess.engine.pieces.Piece;
-import com.chess.engine.Position;
+import com.chess.engine.position.Position;
 
 public class Tile {
 
+
+    /* field holds reference to the piece(if there is one) */
     private Piece pieceOnTile;
+
+    /* field shows whether there is a piece on this tile during the execution of the move */
     private boolean occupiedTile;
+
+    /* position of the tile */
     private final Position position;
+
+    /* coordinate of the tile */
     private final String tileCoordinate;
 
+    /* defensive programming -> initialize position with new instance, so "outside"
+    * reference cannot meddle with it */
+    //string???
     public Tile(final String tileCoordinate, Position position) {
         this.tileCoordinate = tileCoordinate;
-        this.position = position;
+        this.position = new Position(position.getRow(), position.getCol());
     }
 
     public void addPiece(Piece piece){
@@ -20,12 +31,16 @@ public class Tile {
         occupiedTile = true;
     }
 
+    /*  */
+
     public Piece getPieceFromTile(){
         Piece piece = pieceOnTile;
         pieceOnTile = null;
         occupiedTile = false;
         return piece;
     }
+
+
 
     public void removePieceFromPlay(){
         pieceOnTile.setInPlay(false); //?

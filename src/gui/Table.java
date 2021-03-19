@@ -1,6 +1,5 @@
 package gui;
 
-import com.chess.engine.Alliance;
 import com.chess.engine.board.Board;
 import com.chess.engine.board.Tile;
 import com.chess.engine.pieces.Piece;
@@ -9,7 +8,6 @@ import com.chess.engine.players.Player;
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.image.BufferedImage;
@@ -19,8 +17,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static com.chess.engine.utils.BoardUtils.*;
-import static com.chess.engine.Launcher.*;
-import static com.chess.engine.PiecesInitializer.initializePieces;
+import static com.chess.engine.launcher.Launcher.*;
+import static com.chess.engine.launcher.PiecesInitializer.initializePieces;
 import static javax.swing.SwingUtilities.isLeftMouseButton;
 import static javax.swing.SwingUtilities.isRightMouseButton;
 
