@@ -25,7 +25,7 @@ public class Board {
     }
 
     public Tile accessTileByLetter(String letter, int row){
-        int col = 0;
+        int col = 1;
 
         if(row == 1){
             row = 7;
