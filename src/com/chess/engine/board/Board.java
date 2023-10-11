@@ -12,7 +12,7 @@ public class Board {
     }
 
     public Tile[][] getBoard() {
-	int x = 2;
+	int x = 3;
         return board;
     }
 
